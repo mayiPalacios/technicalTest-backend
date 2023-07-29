@@ -4,7 +4,9 @@ CREATE TABLE movie (
   name VARCHAR(255) NOT NULL,
   budget INTEGER NOT NULL,
   date VARCHAR(255) NOT NULL,
-  duration INTEGER NOT NULL
+  duration INTEGER NOT NULL,
+  secure__url_img VARCHAR(255) NOT NULL,
+
 );
 
 -- Script para crear la tabla "opciones"
