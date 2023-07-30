@@ -29,6 +29,9 @@ app.post("/api/movies", moviesController.createMovie);
 // Rutas para opciones
 app.get("/api/options", optionsController.getOptions);
 
+//Rutas para obtener todas las peliculas
+app.get("/movies", moviesController.getMovie);
+
 app.listen(port, () => {
   console.log(`API iniciada en http://localhost:${port}`);
 });
