@@ -19,6 +19,23 @@ const createMovie = async (movie, img) => {
   }
 };
 
+const getMovies = async () => {
+  // Consulta para obtener todas las películas
+  const moviesResult = await pool.query("SELECT * FROM movie");
+  const movies = moviesResult.rows;
+
+  return movies;
+};
+
+const getTotalMovies = async () => {
+  // Consulta para obtener el total de películas
+  const totalResult = await pool.query("SELECT COUNT(*) FROM movie");
+  const total = parseInt(totalResult.rows[0].count);
+  return total;
+};
+
 module.exports = {
   createMovie,
+  getMovies,
+  getTotalMovies,
 };
