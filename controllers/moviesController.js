@@ -15,7 +15,7 @@ const createMovie = async (req, res) => {
 
 const getMovie = async (req, res) => {
   try {
-    const movies = await Movies.getMovies();
+    const movies = await Movies.getMovies(req.query.limit, req.query.offset);
     const total = await Movies.getTotalMovies();
 
     res.json({

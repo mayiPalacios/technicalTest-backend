@@ -19,12 +19,24 @@ const createMovie = async (movie, img) => {
   }
 };
 
-const getMovies = async () => {
-  // Consulta para obtener todas las películas
-  const moviesResult = await pool.query("SELECT * FROM movie");
-  const movies = moviesResult.rows;
+const getMovies = async (limit, offset) => {
+  // Convert limit and offset to numbers
+  const limitNumber = parseInt(limit, 10);
+  const offsetNumber = parseInt(offset, 10);
 
-  return movies;
+  // Consulta para obtener las películas con paginación
+  const query = `SELECT * FROM movie LIMIT $1 OFFSET $2;`;
+  const values = [limitNumber, offsetNumber];
+
+  // Ejecutar la consulta y obtener las películas
+  try {
+    const moviesResult = await pool.query(query, values);
+    const movies = moviesResult.rows;
+    return movies;
+  } catch (error) {
+    console.error("Error fetching movies:", error);
+    throw error;
+  }
 };
 
 const getTotalMovies = async () => {
