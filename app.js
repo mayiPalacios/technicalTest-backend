@@ -35,3 +35,10 @@ app.get("/api/movies", moviesController.getMovie);
 app.listen(port, () => {
   console.log(`API iniciada en http://localhost:${port}`);
 });
+
+//Ruta para obtener año disponibles en la bd
+
+app.get("/api/movies/years", moviesController.getDistinctYear);
+
+// Ruta para obtener películas por año
+app.get("/api/movies/year/:year", moviesController.getMovieByYear);
