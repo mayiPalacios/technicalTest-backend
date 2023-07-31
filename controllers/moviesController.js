@@ -40,8 +40,13 @@ const getDistinctYear = async (req, res) => {
 const getMovieByYear = async (req, res) => {
   const year = req.params.year;
   try {
-    const movies = await Movies.getMoviesByYear(year);
-    res.json(movies);
+    const movies = await Movies.getMoviesByYear(
+      year,
+      req.query.limit,
+      req.query.offset
+    );
+    const total = await Movies.getTotalMoviesByYear(year);
+    res.json({ movies: movies, total: total });
   } catch (error) {
     console.error("Error getting movies by year:", error);
     res

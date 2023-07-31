@@ -5,7 +5,7 @@ const createMovie = async (movie, img) => {
   console.log(name);
 
   // Utilizar marcadores de posición en la consulta SQL
-  const query = `INSERT INTO movie (id, name, budget, date, duration, secure__url_img)
+  const query = `INSERT INTO movie (movie_id, movie_name, budget, date, duration, secure__url_img)
 VALUES ($1, $2, $3, TO_DATE($4, 'MM/DD/YYYY'), $5, $6)
 RETURNING *;`;
 
@@ -27,7 +27,7 @@ const getMovies = async (limit, offset) => {
   const offsetNumber = parseInt(offset, 10);
 
   // Consulta para obtener las películas con paginación
-  const query = `SELECT id, name, budget, DATE(date) AS date, duration, secure__url_img FROM movie LIMIT $1 OFFSET $2;`;
+  const query = `SELECT movie_id, movie_name, budget, DATE(date) AS date, duration, secure__url_img FROM movie LIMIT $1 OFFSET $2;`;
   const values = [limitNumber, offsetNumber];
 
   // Ejecutar la consulta y obtener las películas
@@ -63,10 +63,10 @@ const getDistinctYears = async () => {
   }
 };
 
-const getMoviesByYear = async (year) => {
+const getMoviesByYear = async (year, limit, offset) => {
   try {
-    const query = `SELECT * FROM movie WHERE EXTRACT(YEAR FROM date) = $1;`;
-    const values = [year];
+    const query = `SELECT * FROM movie WHERE EXTRACT(YEAR FROM date) = $1 LIMIT $2 OFFSET $3;`;
+    const values = [year, limit, offset];
 
     const moviesResult = await pool.query(query, values);
     const movies = moviesResult.rows;
@@ -76,10 +76,27 @@ const getMoviesByYear = async (year) => {
     throw error;
   }
 };
+
+const getTotalMoviesByYear = async (year) => {
+  try {
+    const query = `SELECT COUNT(*) FROM movie WHERE EXTRACT(YEAR FROM date) = $1;`;
+    const values = [year];
+
+    const countResult = await pool.query(query, values);
+    const totalMovies = countResult.rows[0].count;
+
+    return totalMovies;
+  } catch (error) {
+    console.error("Error getting total movies by year:", error);
+    throw error;
+  }
+};
+
 module.exports = {
   createMovie,
   getMovies,
   getTotalMovies,
   getDistinctYears,
   getMoviesByYear,
+  getTotalMoviesByYear,
 };
