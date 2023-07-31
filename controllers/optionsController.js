@@ -1,11 +1,16 @@
-const Options = require('../models/options');
+const Options = require("../models/options");
 
 const getOptions = async (req, res) => {
   try {
     const options = await Options.getOptions();
-    res.json(options);
+
+    const jsonOption = {
+      options: options,
+    };
+
+    res.json(jsonOption);
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener las opciones' });
+    res.status(500).json({ error: "Error al obtener las opciones" });
   }
 };
 
