@@ -27,7 +27,37 @@ const getMovie = async (req, res) => {
   }
 };
 
+const getDistinctYear = async (req, res) => {
+  try {
+    const years = await Movies.getDistinctYears();
+    res.json({ years: years });
+  } catch (error) {
+    console.error("Error getting years:", error);
+    res.status(500).json({ error: "An error occurred while getting years" });
+  }
+};
+
+const getMovieByYear = async (req, res) => {
+  const year = req.params.year;
+  try {
+    const movies = await Movies.getMoviesByYear(
+      year,
+      req.query.limit,
+      req.query.offset
+    );
+    const total = await Movies.getTotalMoviesByYear(year);
+    res.json({ movies: movies, total: total });
+  } catch (error) {
+    console.error("Error getting movies by year:", error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while getting movies by year" });
+  }
+};
+
 module.exports = {
   createMovie,
   getMovie,
+  getDistinctYear,
+  getMovieByYear,
 };
